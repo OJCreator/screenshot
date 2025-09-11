@@ -1,25 +1,25 @@
 class ScreenshotType {
 
-    public readonly imgWidth: String
-    public readonly imgHeight: String
+    public readonly imgWidth: number;
+    public readonly imgHeight: number;
 
-    public readonly screenshotWidth: int
-    public readonly screenshotHeight: int
+    public readonly screenshotWidth: number;
+    public readonly screenshotHeight: number;
 
-    public readonly phoneFilename: String
-    public readonly phoneLeft: String
-    public readonly phoneTop: String
-    public readonly phoneTransform: String
+    public readonly phoneFilename: string;
+    public readonly phoneLeft: string;
+    public readonly phoneTop: string;
+    public readonly phoneTransform: string;
 
-    public readonly textLeft: String
-    public readonly textTop: String
-    public readonly textRight: String
-    public readonly textBottom: String
-    public readonly textTransform: String
-    public readonly textAlign: String
-    public readonly textWidth: String
+    public readonly textLeft: string;
+    public readonly textTop: string;
+    public readonly textRight: string;
+    public readonly textBottom: string;
+    public readonly textTransform: string;
+    public readonly textAlign: string;
+    public readonly textWidth: string;
 
-    constructor(imgWidth: int, imgHeight: int, screenshotWidth: int, screenshotHeight: int, phoneFilename: String, phoneLeft: String, phoneTop: String, phoneTransform: String, textLeft: String, textTop: String, textRight: String, textBottom: String, textTransform: String, textAlign: String, textWidth: String) {
+    constructor(imgWidth: number, imgHeight: number, screenshotWidth: number, screenshotHeight: number, phoneFilename: string, phoneLeft: string, phoneTop: string, phoneTransform: string, textLeft: string, textTop: string, textRight: string, textBottom: string, textTransform: string, textAlign: string, textWidth: string) {
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
         this.screenshotWidth = screenshotWidth;

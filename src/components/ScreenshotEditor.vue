@@ -88,7 +88,7 @@
     <div class="col-span-full">
       <label for="about" class="block text-sm/6 font-medium text-gray-900">Text</label>
       <div class="mt-2">
-        <input v-model="text" id="about" name="about" placeholder="Mein Text..." class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></input>
+        <input v-model="text" id="about" name="about" placeholder="Mein Text..." class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
       </div>
     </div>
 
@@ -99,7 +99,7 @@
 
 
     <div class="mt-6 flex items-center justify-end gap-x-6">
-      <button type="button" class="text-sm/6 font-semibold text-gray-900">Zurücksetzen</button>
+      <button @click="reset" type="button" class="text-sm/6 font-semibold text-gray-900">Zurücksetzen</button>
       <button @click="download" type="button"  class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">PNG herunterladen</button>
     </div>
   </form>
@@ -110,17 +110,17 @@ import {ref, watch} from 'vue'
 import html2canvas from 'html2canvas'
 import ScreenshotTypes from './ScreenshotTypes.ts'
 
-const screenshotDragging = ref(false)
-const fontDragging = ref(false)
+const screenshotDragging = ref<boolean>(false)
+const fontDragging = ref<boolean>(false)
 
-const screenshot = ref(null)
-const backgroundColor = ref("020479") //ref('FFF0D1')
-const textColor = ref('FFFFFF')
-const phoneColor = ref('FFFFFF')
-const text = ref('Mein Text')
-const font = ref('Verdana')
+const screenshot = ref<string | null>(null)
+const backgroundColor = ref<string>("456789")
+const textColor = ref<string>('FFFFFF')
+const phoneColor = ref<string>('FFFFFF')
+const text = ref<string>('Mein Text')
+const font = ref<string>('Verdana')
 
-const outputFile = ref("")
+const outputFile = ref<string>("")
 
 // Einzelne Refs beobachten
 watch(screenshot, buildOutputFile)
@@ -130,15 +130,17 @@ watch(phoneColor, buildOutputFile)
 watch(text, buildOutputFile)
 
 // Screenshot-Input
-function onDropScreenshot(e) {
+function onDropScreenshot(e: DragEvent): void {
   screenshotDragging.value = false;
   if (!e.dataTransfer?.files.length) return
   handleNewScreenshot(e.dataTransfer.files[0])
 }
-function onScreenshotUploaded(e) {
-  handleNewScreenshot(e.target.files[0])
+function onScreenshotUploaded(e: Event): void {
+  const target = e.target as HTMLInputElement
+  if (!target.files?.length) return
+  handleNewScreenshot(target.files[0])
 }
-function handleNewScreenshot(file) {
+function handleNewScreenshot(file: File): void {
   if (!file) return
   if (!file.name.toLowerCase().endsWith('.png') && !file.name.toLowerCase().endsWith('.jpg') && !file.name.toLowerCase().endsWith('.jpeg')) {
     alert('Bitte eine Datei mit Endung PNG, JPG oder JPEG hochladen.')
@@ -150,20 +152,26 @@ function handleNewScreenshot(file) {
     return
   }
   const reader = new FileReader()
-  reader.onload = (e) => screenshot.value = e.target.result
+  reader.onload = (e: ProgressEvent<FileReader>) => {
+    if (e.target?.result) {
+      screenshot.value = e.target.result as string
+    }
+  }
   reader.readAsDataURL(file)
 }
 
 // FONT
-function onDropFont(e) {
+function onDropFont(e: DragEvent): void {
   fontDragging.value = false;
   if (!e.dataTransfer?.files.length) return
   handleNewFont(e.dataTransfer.files[0])
 }
-function onFontUploaded(e) {
-  handleNewFont(e.target.files[0])
+function onFontUploaded(e: Event): void {
+  const target = e.target as HTMLInputElement
+  if (!target.files?.length) return
+  handleNewFont(target.files[0])
 }
-async function handleNewFont(file) {
+async function handleNewFont(file: File): Promise<void> {
   if (!file) return
   if (!file.name.toLowerCase().endsWith('.ttf')) {
     alert('Bitte eine TTF-Datei hochladen.')
@@ -191,9 +199,9 @@ async function handleNewFont(file) {
 
 
 
-async function buildOutputFile() {
+async function buildOutputFile(): Promise<void> {
 
-  const screenshotType = ScreenshotTypes.LS_BOTTOM;
+  const screenshotType = ScreenshotTypes.PT_BOTTOM;
 
   // Container in Originalgröße erstellen
   const exportDiv = document.createElement('div')
@@ -219,7 +227,7 @@ async function buildOutputFile() {
   }
 
   // Handy (1224 x 612)
-  const phoneCanvas = await new Promise(resolve => {
+  const phoneCanvas: HTMLCanvasElement = await new Promise(resolve => {
     createColoredPhone(screenshotType.phoneFilename, phoneColor.value, resolve)
   });
   phoneCanvas.style.position = 'absolute'
@@ -261,7 +269,7 @@ async function buildOutputFile() {
  * @param {string} color - Farbe z.B. "#FF0000"
  * @param {function(HTMLCanvasElement): void} callback - Wird aufgerufen, wenn das Canvas fertig ist
  */
-function createColoredPhone(imgSrc, color, callback) {
+function createColoredPhone(imgSrc: string, color: string, callback: (canvas: HTMLCanvasElement) => void): void {
   const img = new Image()
   img.src = imgSrc
   img.onload = () => {
@@ -269,9 +277,13 @@ function createColoredPhone(imgSrc, color, callback) {
     canvas.width = img.width
     canvas.height = img.height
     const ctx = canvas.getContext('2d')
+
+    if (!ctx) return
+
     ctx.drawImage(img, 0, 0)
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
     const data = imageData.data
 
     const rgb = hexToRgb(color)
@@ -290,13 +302,13 @@ function createColoredPhone(imgSrc, color, callback) {
       }
     }
 
-    ctx.putImageData(imageData, 0, 0)
+    ctx?.putImageData(imageData, 0, 0)
     callback(canvas)
   }
 }
 
 // Hilfsfunktion Hex → RGB
-function hexToRgb(hex) {
+function hexToRgb(hex: string) {
   if (hex.startsWith('#')) {
     hex = hex.replace(/^#/, '')
   }
@@ -309,10 +321,21 @@ function hexToRgb(hex) {
 
 
 function download() {
-  const link = document.createElement('a')
-  link.download = 'screenshot.png'
+  const link = document.createElement('a');
+  link.download = 'screenshot.png';
   link.href = outputFile.value;
-  link.click()
+  link.click();
+}
+function reset() {
+  screenshotDragging.value = false;
+  fontDragging.value = false;
+
+  screenshot.value = null;
+  backgroundColor.value = "456789";
+  textColor.value = 'FFFFFF';
+  phoneColor.value = 'FFFFFF';
+  text.value = 'Mein Text';
+  font.value = 'Verdana';
 }
 
 
