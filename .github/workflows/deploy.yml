@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "dist/*"
+          source: dist/*
           target: "/var/www/html/de/ole-jansen/screenshot"
