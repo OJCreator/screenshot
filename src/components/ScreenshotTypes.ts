@@ -19,7 +19,10 @@ class ScreenshotType {
     public readonly textAlign: string;
     public readonly textWidth: string;
 
-    constructor(imgWidth: number, imgHeight: number, screenshotWidth: number, screenshotHeight: number, phoneFilename: string, phoneLeft: string, phoneTop: string, phoneTransform: string, textLeft: string, textTop: string, textRight: string, textBottom: string, textTransform: string, textAlign: string, textWidth: string) {
+    public readonly phonePlacement: string;
+    public readonly orientation: string;
+
+    constructor(imgWidth: number, imgHeight: number, screenshotWidth: number, screenshotHeight: number, phoneFilename: string, phoneLeft: string, phoneTop: string, phoneTransform: string, textLeft: string, textTop: string, textRight: string, textBottom: string, textTransform: string, textAlign: string, textWidth: string, phonePlacement: string, orientation: string) {
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
         this.screenshotWidth = screenshotWidth;
@@ -35,6 +38,9 @@ class ScreenshotType {
         this.textTransform = textTransform;
         this.textAlign = textAlign;
         this.textWidth = textWidth;
+
+        this.phonePlacement = phonePlacement;
+        this.orientation = orientation;
     }
 }
 
@@ -54,7 +60,9 @@ class ScreenshotTypes {
         "80%",
         "translateX(-50%)",
         "center",
-        "720px"
+        "720px",
+        "bottom",
+        "portrait"
     );
     static readonly PT_TOP = new ScreenshotType(
         1080,
@@ -71,7 +79,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "center",
-        "720px"
+        "720px",
+        "top",
+        "portrait"
     );
     static readonly PT_MIDDLE = new ScreenshotType(
         1080,
@@ -88,7 +98,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "center",
-        "720px"
+        "720px",
+        "middle",
+        "portrait"
     );
     static readonly PT_TILTED1 = new ScreenshotType(
         1080,
@@ -105,7 +117,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "left",
-        "720px"
+        "720px",
+        "tilted1",
+        "portrait"
     );
     static readonly PT_TILTED2 = new ScreenshotType(
         1080,
@@ -122,7 +136,9 @@ class ScreenshotTypes {
         "7%",
         "translateX(-50%)",
         "right",
-        "720px"
+        "720px",
+        "tilted2",
+        "portrait"
     );
 
 
@@ -141,7 +157,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "left",
-        "700px"
+        "700px",
+        "left",
+        "landscape"
     );
     static readonly LS_TOP = new ScreenshotType(
         1920,
@@ -158,7 +176,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "center",
-        "1480px"
+        "1480px",
+        "top",
+        "landscape"
     );
     static readonly LS_RIGHT = new ScreenshotType(
         1920,
@@ -175,7 +195,9 @@ class ScreenshotTypes {
         "",
         "translateX(-50%)",
         "right",
-        "700px"
+        "700px",
+        "right",
+        "landscape"
     );
     static readonly LS_BOTTOM = new ScreenshotType(
         1920,
@@ -192,13 +214,22 @@ class ScreenshotTypes {
         "60%",
         "translateX(-50%)",
         "center",
-        "1480px"
+        "1480px",
+        "bottom",
+        "landscape"
     );
 
-    // static LS_LEFT;
-    // static LS_TOP;
-    // static LS_RIGHT;
-    // static LS_MIDDLE;
+    static readonly values = [
+        ScreenshotTypes.PT_BOTTOM,
+        ScreenshotTypes.PT_TOP,
+        ScreenshotTypes.PT_MIDDLE,
+        ScreenshotTypes.PT_TILTED1,
+        ScreenshotTypes.PT_TILTED2,
+        ScreenshotTypes.LS_LEFT,
+        ScreenshotTypes.LS_TOP,
+        ScreenshotTypes.LS_RIGHT,
+        ScreenshotTypes.LS_BOTTOM,
+    ]
 }
 
-export default ScreenshotTypes;
+export { ScreenshotType, ScreenshotTypes };

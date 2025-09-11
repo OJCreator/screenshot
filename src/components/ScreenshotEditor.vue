@@ -1,117 +1,276 @@
 <template>
-  <form class="p-6 space-y-6 mx-auto">
 
-    <h1 class="text-base/7 font-semibold text-gray-900">Screenshot erstellen</h1>
+  <div class="bg-white pt-18 pb-24 sm:pt-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl lg:mx-0">
+        <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Screenshot Generator</h2>
+        <p class="mt-2 text-lg/8 text-gray-600">Erstelle kostenlos deinen Screenshot für Google Play oder den Apple App Store</p>
+      </div>
 
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
 
-      <div class="md:col-span-1 md:col-start-1">
-        <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Screenshot</label>
-        <div
-            @dragover.prevent="screenshotDragging = true"
-            @dragleave.prevent="screenshotDragging = false"
-            @dragenter.prevent="screenshotDragging = false"
-            @drop.prevent="onDropScreenshot" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" :class="screenshotDragging ? ['border-indigo-500'] : []">
-          <div class="text-center">
-            <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
-            </svg>
-            <div class="mt-4 flex text-sm/6 text-gray-600">
-              <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
-                <span>Datei auswählen</span>
-                <input @change="onScreenshotUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
-              </label>
-              <p class="pl-1">oder drag and drop</p>
+      <form class="mt-5 mx-auto max-w-2xl gap-x-5 gap-y-16 border-t border-gray-200 pt-5 sm:mt-12 sm:pt-12 lg:mx-0 lg:max-w-none">
+
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+          <fieldset>
+            <legend class="text-sm/6 font-semibold text-gray-900">Orientierung</legend>
+            <p class="mt-1 text-sm/6 text-gray-600">Welche Orientierung soll dein Screenshot haben?</p>
+            <div class="mt-6 space-y-6">
+              <div class="flex items-center gap-x-3">
+                <input id="portrait" type="radio" name="orientation" v-model="orientation" :value="'portrait'" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="portrait" class="block text-sm/6 font-medium text-gray-900">Vertikal</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="landscape" type="radio" name="orientation" v-model="orientation" :value="'landscape'" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="landscape" class="block text-sm/6 font-medium text-gray-900">Horizontal</label>
+              </div>
             </div>
-            <p class="text-xs/5 text-gray-600">PNG, JPG, JPEG bis 10MB</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="md:col-span-1">
-        <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Schriftart</label>
-        <div
-            @dragover.prevent="fontDragging = true"
-            @dragleave.prevent="fontDragging = false"
-            @dragenter.prevent="fontDragging = false"
-            @drop.prevent="onDropFont" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" :class="fontDragging ? ['border-indigo-500'] : []">
-          <div class="text-center">
-            <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M349.1 114.7C343.9 103.3 332.5 96 320 96C307.5 96 296.1 103.3 290.9 114.7L123.5 480L112 480C94.3 480 80 494.3 80 512C80 529.7 94.3 544 112 544L200 544C217.7 544 232 529.7 232 512C232 494.3 217.7 480 200 480L193.9 480L215.9 432L424.2 432L446.2 480L440.1 480C422.4 480 408.1 494.3 408.1 512C408.1 529.7 422.4 544 440.1 544L528.1 544C545.8 544 560.1 529.7 560.1 512C560.1 494.3 545.8 480 528.1 480L516.6 480L349.2 114.7zM394.8 368L245.2 368L320 204.8L394.8 368z"/></svg>
-            </svg>
-            <div class="mt-4 flex text-sm/6 text-gray-600">
-              <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
-                <span>Datei auswählen</span>
-                <input @change="onFontUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
-              </label>
-              <p class="pl-1">oder drag and drop</p>
+          </fieldset>
+          <fieldset>
+            <legend class="text-sm/6 font-semibold text-gray-900">Handy-Platzierung</legend>
+            <p class="mt-1 text-sm/6 text-gray-600">Wo soll sich das Handy befinden?</p>
+            <div class="mt-6 space-y-6">
+              <div class="flex items-center gap-x-3">
+                <input id="left" type="radio" v-model="phonePlacement" :value="'left'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'left')" name="phonePlacement" checked class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="left" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Links</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="top" type="radio" v-model="phonePlacement" :value="'top'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'top')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="top" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Oben</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="right" type="radio" v-model="phonePlacement" :value="'right'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'right')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="right" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Rechts</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="bottom" type="radio" v-model="phonePlacement" :value="'bottom'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'bottom')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="bottom" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Unten</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="middle" type="radio" v-model="phonePlacement" :value="'middle'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'middle')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="middle" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Mitte</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="tilted1" type="radio" v-model="phonePlacement" :value="'tilted1'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'tilted1')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="tilted1" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Gekippt (1)</label>
+              </div>
+              <div class="flex items-center gap-x-3">
+                <input id="tilted2" type="radio" v-model="phonePlacement" :value="'tilted2'" :disabled="ScreenshotTypes.values.every((value) => value.orientation != orientation || value.phonePlacement != 'tilted2')" name="phonePlacement" class="peer relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="tilted2" class="block text-sm/6 font-medium text-gray-900 peer-disabled:text-gray-400">Gekippt (2)</label>
+              </div>
             </div>
-            <p class="text-xs/5 text-gray-600">TTF bis 1MB</p>
+          </fieldset>
+        </div>
+
+        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-2">
+
+          <div class="md:col-span-1 md:col-start-1">
+            <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Screenshot</label>
+            <div
+                @dragover.prevent="screenshotDragging = true"
+                @dragleave.prevent="screenshotDragging = false"
+                @dragenter.prevent="screenshotDragging = false"
+                @drop.prevent="onDropScreenshot" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" :class="screenshotDragging ? ['border-indigo-500'] : []">
+              <div class="text-center">
+                <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                </svg>
+                <div class="mt-4 flex text-sm/6 text-gray-600">
+                  <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
+                    <span>Datei auswählen</span>
+                    <input @change="onScreenshotUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
+                  </label>
+                  <p class="pl-1">oder drag and drop</p>
+                </div>
+                <p class="text-xs/5 text-gray-600">PNG, JPG, JPEG bis 10MB</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-1">
+            <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Schriftart</label>
+            <div
+                @dragover.prevent="fontDragging = true"
+                @dragleave.prevent="fontDragging = false"
+                @dragenter.prevent="fontDragging = false"
+                @drop.prevent="onDropFont" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" :class="fontDragging ? ['border-indigo-500'] : []">
+              <div class="text-center">
+                <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M349.1 114.7C343.9 103.3 332.5 96 320 96C307.5 96 296.1 103.3 290.9 114.7L123.5 480L112 480C94.3 480 80 494.3 80 512C80 529.7 94.3 544 112 544L200 544C217.7 544 232 529.7 232 512C232 494.3 217.7 480 200 480L193.9 480L215.9 432L424.2 432L446.2 480L440.1 480C422.4 480 408.1 494.3 408.1 512C408.1 529.7 422.4 544 440.1 544L528.1 544C545.8 544 560.1 529.7 560.1 512C560.1 494.3 545.8 480 528.1 480L516.6 480L349.2 114.7zM394.8 368L245.2 368L320 204.8L394.8 368z"/></svg>
+                </svg>
+                <div class="mt-4 flex text-sm/6 text-gray-600">
+                  <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
+                    <span>Datei auswählen</span>
+                    <input @change="onFontUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
+                  </label>
+                  <p class="pl-1">oder drag and drop</p>
+                </div>
+                <p class="text-xs/5 text-gray-600">TTF bis 1MB</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3">
+        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
 
-      <div class="sm:col-span-1 sm:col-start-1">
-        <label for="backgroundColor" class="block text-sm/6 font-medium text-gray-900">Hintergrundfarbe</label>
-        <div class="mt-2">
-          <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-            <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
-            <input id="backgroundColor" v-model="backgroundColor" type="text" name="backgroundColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+          <div class="sm:col-span-1 sm:col-start-1">
+            <label for="backgroundColor" class="block text-sm/6 font-medium text-gray-900">Hintergrundfarbe</label>
+            <div class="mt-2">
+              <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
+                <input id="backgroundColor" v-model="backgroundColor" type="text" name="backgroundColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-1">
+            <label for="textColor" class="block text-sm/6 font-medium text-gray-900">Textfarbe</label>
+            <div class="mt-2">
+              <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
+                <input id="textColor" v-model="textColor" type="text" name="textColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-1">
+            <label for="phoneColor" class="block text-sm/6 font-medium text-gray-900">Handyfarbe</label>
+            <div class="mt-2">
+              <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
+                <input id="phoneColor" v-model="phoneColor" type="text" name="phoneColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="sm:col-span-1">
-        <label for="textColor" class="block text-sm/6 font-medium text-gray-900">Textfarbe</label>
-        <div class="mt-2">
-          <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-            <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
-            <input id="textColor" v-model="textColor" type="text" name="textColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+
+        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
+
+          <div class="sm:col-span-1 sm:col-start-1">
+            <label for="text" class="block text-sm/6 font-medium text-gray-900">Text</label>
+            <div class="mt-2">
+              <textarea v-model="text" id="text" name="text" placeholder="Mein Text..." class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+            </div>
+          </div>
+
+
+          <div class="sm:col-span-1">
+            <label for="about" class="block text-sm/6 font-medium text-gray-900">Textausrichtung</label>
+            <div id="Ausrichtung" class="mt-2 inline-flex rounded-xl shadow">
+              <!-- Links -->
+              <button @click="textAlignment = 'left'" type="button" class="px-3 py-2 border border-gray-300 rounded-l-xl" :class="textAlignment == 'left' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h10M4 14h16M4 18h10" />
+                </svg>
+              </button>
+              <!-- Zentriert -->
+              <button @click="textAlignment = 'center'" type="button" class="px-3 py-2 border-t border-r border-b border-gray-300" :class="textAlignment == 'center' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M8 10h8M4 14h16M8 18h8" />
+                </svg>
+              </button>
+              <!-- Rechts -->
+              <button @click="textAlignment = 'right'" type="button" class="px-3 py-2 border-t border-b border-gray-300" :class="textAlignment == 'right' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 10h10M4 14h16M10 18h10" />
+                </svg>
+              </button>
+              <!-- Rechts -->
+              <button @click="textAlignment = 'block'" type="button" class="px-3 py-2 border border-gray-300 rounded-r-xl" :class="textAlignment == 'block' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="sm:col-span-1">
+            <label class="block text-sm/6 font-medium text-gray-900">Vertikale Ausrichtung</label>
+            <div id="VertikaleAusrichtung" class="mt-2 inline-flex rounded-xl shadow">
+              <!-- Oben -->
+              <button
+                  @click="verticalAlignment = 'top'"
+                  type="button"
+                  class="px-3 py-2 border border-gray-300 rounded-l-xl"
+                  :class="verticalAlignment == 'top'
+              ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+              : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="4" y="3" width="16" height="4" rx="1" fill="currentColor"/>
+                  <line x1="12" y1="10" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+              <!-- Mitte -->
+              <button
+                  @click="verticalAlignment = 'middle'"
+                  type="button"
+                  class="px-3 py-2 border-t border-b border-gray-300"
+                  :class="verticalAlignment == 'middle'
+              ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+              : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="4" y="10" width="16" height="4" rx="1" fill="currentColor"/>
+                  <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+              <!-- Unten -->
+              <button
+                  @click="verticalAlignment = 'bottom'"
+                  type="button"
+                  class="px-3 py-2 border border-gray-300 rounded-r-xl"
+                  :class="verticalAlignment == 'bottom'
+              ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+              : 'bg-white hover:bg-gray-100 text-gray-700'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="4" y="17" width="16" height="4" rx="1" fill="currentColor"/>
+                  <line x1="12" y1="3" x2="12" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="sm:col-span-1">
-        <label for="phoneColor" class="block text-sm/6 font-medium text-gray-900">Handyfarbe</label>
-        <div class="mt-2">
-          <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
-            <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">#</div>
-            <input id="phoneColor" v-model="phoneColor" type="text" name="phoneColor" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
-          </div>
+
+
+        <div class="mt-5 pt-5 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
+
+          <img
+              v-if="!generatingOutputFiles"
+              :src="outputFile"
+              :alt="`screenshot.png`"
+              class="border border-gray-300 rounded h-[280px] w-auto mx-auto relative flex justify-center items-center"
+          />
+          <div
+              v-if="generatingOutputFiles"
+              class="border border-gray-300 rounded h-[280px] animate-pulse bg-gray-300 mx-auto relative flex justify-center items-center"
+              :style="getCurrentScreenshotType() ? { width: `${getCurrentScreenshotType()!.imgWidth * 280 / getCurrentScreenshotType()!.imgHeight}px` }: ''"
+          />
         </div>
-      </div>
+
+
+
+        <div class="fixed bottom-4 right-4 flex items-center justify-end gap-x-6 bg-white rounded-lg border-2 border-gray-600 p-3">
+          <button @click="reset" type="button" class="rounded-md bg-gray-500 text-white px-3 py-2 text-sm font-semibold shadow-xs hover:bg-gray-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Zurücksetzen</button>
+          <button @click="download" type="button" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">PNG herunterladen</button>
+        </div>
+      </form>
     </div>
-
-    <div class="col-span-full">
-      <label for="about" class="block text-sm/6 font-medium text-gray-900">Text</label>
-      <div class="mt-2">
-        <input v-model="text" id="about" name="about" placeholder="Mein Text..." class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-      </div>
-    </div>
-
-
-    <img :src="outputFile" alt="screenshot.png" class="border border-gray-300 rounded h-[280px] w-auto mx-auto relative flex justify-center items-center">
-
-
-
-
-    <div class="mt-6 flex items-center justify-end gap-x-6">
-      <button @click="reset" type="button" class="text-sm/6 font-semibold text-gray-900">Zurücksetzen</button>
-      <button @click="download" type="button"  class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">PNG herunterladen</button>
-    </div>
-  </form>
+  </div>
 </template>
 
 <script setup lang="ts">
 import {ref, watch} from 'vue'
 import html2canvas from 'html2canvas'
-import ScreenshotTypes from './ScreenshotTypes.ts'
+import {ScreenshotType, ScreenshotTypes} from './ScreenshotTypes.ts'
 
 const screenshotDragging = ref<boolean>(false)
 const fontDragging = ref<boolean>(false)
+
+const orientation = ref<"portrait" | "landscape">("portrait")
+const phonePlacement = ref<string>("bottom")
 
 const screenshot = ref<string | null>(null)
 const backgroundColor = ref<string>("456789")
@@ -119,15 +278,19 @@ const textColor = ref<string>('FFFFFF')
 const phoneColor = ref<string>('FFFFFF')
 const text = ref<string>('Mein Text')
 const font = ref<string>('Verdana')
+const textAlignment = ref<string>('left')
+const verticalAlignment = ref<string>('top')
 
+const generatingOutputFiles = ref<boolean>(true);
 const outputFile = ref<string>("")
 
-// Einzelne Refs beobachten
-watch(screenshot, buildOutputFile)
-watch(backgroundColor, buildOutputFile)
-watch(textColor, buildOutputFile)
-watch(phoneColor, buildOutputFile)
-watch(text, buildOutputFile)
+watch(orientation, () => buildAllOutputFiles())
+watch(phonePlacement, () => buildAllOutputFiles())
+watch(screenshot, () => buildAllOutputFiles())
+watch(backgroundColor, () => buildAllOutputFiles())
+watch(textColor, () => buildAllOutputFiles())
+watch(phoneColor, () => buildAllOutputFiles())
+watch(text, () => buildAllOutputFiles())
 
 // Screenshot-Input
 function onDropScreenshot(e: DragEvent): void {
@@ -177,31 +340,38 @@ async function handleNewFont(file: File): Promise<void> {
     alert('Bitte eine TTF-Datei hochladen.')
     return
   }
-  const maxSizeMB = 1
+  const maxSizeMB = 1;
   if (file.size > maxSizeMB * 1024 * 1024) {
-    alert(`Datei ist zu groß. Maximal ${maxSizeMB} MB erlaubt.`)
-    return
+    alert(`Datei ist zu groß. Maximal ${maxSizeMB} MB erlaubt.`);
+    return;
   }
 
-  const arrayBuffer = await file.arrayBuffer()
+  const arrayBuffer = await file.arrayBuffer();
 
   // FontFace erstellen und registrieren
-  const fontFace = new FontFace("UserFont", arrayBuffer)
-  await fontFace.load()
-  document.fonts.add(fontFace)
+  const fontFace = new FontFace("UserFont", arrayBuffer);
+  await fontFace.load();
+  document.fonts.add(fontFace);
 
-  font.value = "UserFont"
-
-  await buildOutputFile();
+  font.value = "UserFont";
 }
 
 
 
+async function buildAllOutputFiles(): Promise<void> {
+  generatingOutputFiles.value = true;
+  await buildOutputFile();
+  generatingOutputFiles.value = false;
+}
 
+function getCurrentScreenshotType(): ScreenshotType | undefined {
+  return ScreenshotTypes.values.find((value) => value.orientation == orientation.value && value.phonePlacement == phonePlacement.value);
+}
 
 async function buildOutputFile(): Promise<void> {
 
-  const screenshotType = ScreenshotTypes.PT_BOTTOM;
+  const screenshotType: ScreenshotType | undefined = getCurrentScreenshotType();
+  if (!screenshotType) return;
 
   // Container in Originalgröße erstellen
   const exportDiv = document.createElement('div')
@@ -257,9 +427,9 @@ async function buildOutputFile(): Promise<void> {
 
   document.body.appendChild(exportDiv)
 
-  html2canvas(exportDiv, {width: screenshotType.imgWidth, height: screenshotType.imgHeight, scale: 1}).then(canvas => {
-    outputFile.value = canvas.toDataURL('image/png')
-    document.body.removeChild(exportDiv)
+  await html2canvas(exportDiv, {width: screenshotType.imgWidth, height: screenshotType.imgHeight, scale: 1}).then(canvas => {
+    outputFile.value = canvas.toDataURL('image/png');
+    document.body.removeChild(exportDiv);
   })
 }
 
@@ -338,7 +508,6 @@ function reset() {
   font.value = 'Verdana';
 }
 
-
-buildOutputFile();
+buildAllOutputFiles();
 
 </script>
