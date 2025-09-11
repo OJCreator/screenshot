@@ -146,7 +146,7 @@ function handleNewScreenshot(file: File): void {
     alert('Bitte eine Datei mit Endung PNG, JPG oder JPEG hochladen.')
     return
   }
-  const maxSizeMB = 1
+  const maxSizeMB = 10
   if (file.size > maxSizeMB * 1024 * 1024) {
     alert(`Datei ist zu groß. Maximal ${maxSizeMB} MB erlaubt.`)
     return
