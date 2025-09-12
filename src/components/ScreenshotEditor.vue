@@ -8,7 +8,7 @@
       </div>
 
 
-      <form class="mt-5 mx-auto max-w-2xl gap-x-5 gap-y-16 border-t border-gray-200 pt-5 sm:mt-12 sm:pt-12 lg:mx-0 lg:max-w-none">
+      <form class="mt-10 pt-10 mx-auto max-w-2xl gap-x-5 gap-y-16 border-t border-gray-200 sm:mt-12 sm:pt-12 lg:mx-0 lg:max-w-none">
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
           <fieldset>
@@ -61,7 +61,7 @@
           </fieldset>
         </div>
 
-        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-2">
+        <div class="mt-10 pt-10 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12" :class="getCurrentScreenshotType()?.twoScreenshots ? ['md:grid-cols-3'] : ['md:grid-cols-2']">
 
           <div class="md:col-span-1 md:col-start-1">
             <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Screenshot</label>
@@ -78,6 +78,29 @@
                   <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
                     <span>Datei auswählen</span>
                     <input @change="onScreenshotUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
+                  </label>
+                  <p class="pl-1">oder drag and drop</p>
+                </div>
+                <p class="text-xs/5 text-gray-600">PNG, JPG, JPEG bis 10MB</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-1" v-if="getCurrentScreenshotType()?.twoScreenshots">
+            <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Screenshot 2</label>
+            <div
+                @dragover.prevent="screenshot2Dragging = true"
+                @dragleave.prevent="screenshot2Dragging = false"
+                @dragenter.prevent="screenshot2Dragging = false"
+                @drop.prevent="onDropSecondScreenshot" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10" :class="screenshot2Dragging ? ['border-indigo-500'] : []">
+              <div class="text-center">
+                <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                </svg>
+                <div class="mt-4 flex text-sm/6 text-gray-600">
+                  <label for="file-upload" class="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-600 hover:text-indigo-500">
+                    <span>Datei auswählen</span>
+                    <input @change="onSecondScreenshotUploaded" id="file-upload" type="file" name="file-upload" class="sr-only" />
                   </label>
                   <p class="pl-1">oder drag and drop</p>
                 </div>
@@ -110,7 +133,7 @@
           </div>
         </div>
 
-        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
+        <div class="mt-10 pt-10 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
 
           <div class="sm:col-span-1 sm:col-start-1">
             <label for="backgroundColor" class="block text-sm/6 font-medium text-gray-900">Hintergrundfarbe</label>
@@ -144,7 +167,7 @@
         </div>
 
 
-        <div class="mt-5 pt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
+        <div class="mt-10 pt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-3 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
 
           <div class="sm:col-span-1 sm:col-start-1">
             <label for="text" class="block text-sm/6 font-medium text-gray-900">Text</label>
@@ -235,7 +258,7 @@
 
 
 
-        <div class="mt-5 pt-5 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
+        <div class="mt-10 pt-10 border-t border-gray-200 sm:mt-12 sm:pt-12 md:grid-cols-3">
 
           <img
               v-if="!generatingOutputFiles"
@@ -267,12 +290,14 @@ import html2canvas from 'html2canvas'
 import {ScreenshotType, ScreenshotTypes} from './ScreenshotTypes.ts'
 
 const screenshotDragging = ref<boolean>(false)
+const screenshot2Dragging = ref<boolean>(false)
 const fontDragging = ref<boolean>(false)
 
 const orientation = ref<"portrait" | "landscape">("portrait")
 const phonePlacement = ref<string>("bottom")
 
 const screenshot = ref<string | null>(null)
+const screenshot2 = ref<string | null>(null)
 const backgroundColor = ref<string>("456789")
 const textColor = ref<string>('FFFFFF')
 const phoneColor = ref<string>('FFFFFF')
@@ -287,23 +312,31 @@ const outputFile = ref<string>("")
 watch(orientation, () => buildAllOutputFiles())
 watch(phonePlacement, () => buildAllOutputFiles())
 watch(screenshot, () => buildAllOutputFiles())
+watch(screenshot2, () => buildAllOutputFiles())
 watch(backgroundColor, () => buildAllOutputFiles())
 watch(textColor, () => buildAllOutputFiles())
 watch(phoneColor, () => buildAllOutputFiles())
 watch(text, () => buildAllOutputFiles())
 
 // Screenshot-Input
-function onDropScreenshot(e: DragEvent): void {
+function onDropSecondScreenshot(e: DragEvent): void {
+  return onDropScreenshot(e, true);
+}
+function onDropScreenshot(e: DragEvent, isSecondScreenshot: boolean = false): void {
+  screenshot2Dragging.value = false;
   screenshotDragging.value = false;
   if (!e.dataTransfer?.files.length) return
-  handleNewScreenshot(e.dataTransfer.files[0])
+  handleNewScreenshot(e.dataTransfer.files[0], isSecondScreenshot)
 }
-function onScreenshotUploaded(e: Event): void {
+function onSecondScreenshotUploaded(e: Event): void {
+  return onScreenshotUploaded(e, true);
+}
+function onScreenshotUploaded(e: Event, isSecondScreenshot: boolean = false): void {
   const target = e.target as HTMLInputElement
   if (!target.files?.length) return
-  handleNewScreenshot(target.files[0])
+  handleNewScreenshot(target.files[0], isSecondScreenshot)
 }
-function handleNewScreenshot(file: File): void {
+function handleNewScreenshot(file: File, isSecondScreenshot: boolean = false): void {
   if (!file) return
   if (!file.name.toLowerCase().endsWith('.png') && !file.name.toLowerCase().endsWith('.jpg') && !file.name.toLowerCase().endsWith('.jpeg')) {
     alert('Bitte eine Datei mit Endung PNG, JPG oder JPEG hochladen.')
@@ -317,7 +350,11 @@ function handleNewScreenshot(file: File): void {
   const reader = new FileReader()
   reader.onload = (e: ProgressEvent<FileReader>) => {
     if (e.target?.result) {
-      screenshot.value = e.target.result as string
+      if (isSecondScreenshot) {
+        screenshot2.value = e.target.result as string
+      } else {
+        screenshot.value = e.target.result as string
+      }
     }
   }
   reader.readAsDataURL(file)
@@ -391,8 +428,8 @@ async function buildOutputFile(): Promise<void> {
     shotImg.style.height = screenshotType.screenshotHeight + "px"
     shotImg.style.left = screenshotType.phoneLeft
     shotImg.style.top = screenshotType.phoneTop
-    shotImg.style.transform = screenshotType.phoneTransform + "scale(0.95)"
-    shotImg.style.borderRadius = '75px'
+    shotImg.style.transform = screenshotType.phoneTransform + "scale(0.99)"
+    shotImg.style.borderRadius = '95px'
     exportDiv.appendChild(shotImg)
   }
 
@@ -401,12 +438,38 @@ async function buildOutputFile(): Promise<void> {
     createColoredPhone(screenshotType.phoneFilename, phoneColor.value, resolve)
   });
   phoneCanvas.style.position = 'absolute'
-  phoneCanvas.style.width = screenshotType.screenshotWidth + "px"
   phoneCanvas.style.height = screenshotType.screenshotHeight + "px"
   phoneCanvas.style.left = screenshotType.phoneLeft
   phoneCanvas.style.top = screenshotType.phoneTop
   phoneCanvas.style.transform = screenshotType.phoneTransform
   exportDiv.appendChild(phoneCanvas)
+
+  // 2. Screenshot
+  if (screenshotType.twoScreenshots) {
+    if (screenshot2.value != null) {
+      const shot2Img = document.createElement('img')
+      shot2Img.src = screenshot2.value
+      shot2Img.style.position = 'absolute'
+      shot2Img.style.width = screenshotType.screenshot2Width! + "px"
+      shot2Img.style.height = screenshotType.screenshot2Height! + "px"
+      shot2Img.style.left = screenshotType.phone2Left!
+      shot2Img.style.top = screenshotType.phone2Top!
+      shot2Img.style.transform = screenshotType.phone2Transform! + "scale(0.99)"
+      shot2Img.style.borderRadius = '95px'
+      exportDiv.appendChild(shot2Img)
+    }
+
+    // Handy (1224 x 612)
+    const phone2Canvas: HTMLCanvasElement = await new Promise(resolve => {
+      createColoredPhone(screenshotType.phone2Filename!, phoneColor.value, resolve)
+    });
+    phone2Canvas.style.position = 'absolute'
+    phone2Canvas.style.height = screenshotType.screenshot2Height! + "px"
+    phone2Canvas.style.left = screenshotType.phone2Left!
+    phone2Canvas.style.top = screenshotType.phone2Top!
+    phone2Canvas.style.transform = screenshotType.phone2Transform!
+    exportDiv.appendChild(phone2Canvas)
+  }
 
 
   // Text
@@ -501,6 +564,7 @@ function reset() {
   fontDragging.value = false;
 
   screenshot.value = null;
+  screenshot2.value = null;
   backgroundColor.value = "456789";
   textColor.value = 'FFFFFF';
   phoneColor.value = 'FFFFFF';
