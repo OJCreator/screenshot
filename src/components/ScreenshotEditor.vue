@@ -178,6 +178,28 @@
 
 
           <div class="sm:col-span-1">
+            <label for="wordSpacing" class="block text-sm/6 font-medium text-gray-900">Word-Spacing</label>
+            <div class="mt-2">
+              <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                <input id="wordSpacing" v-model="wordSpacing" type="number" name="wordSpacing" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6 mr-3">em</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="sm:col-span-1">
+            <label for="textSize" class="block text-sm/6 font-medium text-gray-900">Textgröße</label>
+            <div class="mt-2">
+              <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                <input id="textSize" v-model="textSize" type="number" name="textSize" placeholder="FB08AC" class="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" />
+                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6 mr-3">Punkt</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="sm:col-span-1">
             <label for="about" class="block text-sm/6 font-medium text-gray-900">Textausrichtung</label>
             <div id="Ausrichtung" class="mt-2 inline-flex rounded-xl shadow">
               <!-- Links -->
@@ -199,7 +221,7 @@
                 </svg>
               </button>
               <!-- Rechts -->
-              <button @click="textAlignment = 'block'" type="button" class="px-3 py-2 border border-gray-300 rounded-r-xl" :class="textAlignment == 'block' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
+              <button @click="textAlignment = 'justify'" type="button" class="px-3 py-2 border border-gray-300 rounded-r-xl" :class="textAlignment == 'justify' ? 'bg-indigo-500 hover:bg-indigo-600 text-white' : 'bg-white hover:bg-gray-100 text-gray-700'">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                 </svg>
@@ -207,7 +229,7 @@
             </div>
           </div>
 
-          <div class="sm:col-span-1">
+          <div class="sm:col-span-1 sr-only">
             <label class="block text-sm/6 font-medium text-gray-900">Vertikale Ausrichtung</label>
             <div id="VertikaleAusrichtung" class="mt-2 inline-flex rounded-xl shadow">
               <!-- Oben -->
@@ -302,6 +324,8 @@ const backgroundColor = ref<string>("456789")
 const textColor = ref<string>('FFFFFF')
 const phoneColor = ref<string>('FFFFFF')
 const text = ref<string>('Mein Text')
+const wordSpacing = ref<number>(0.25)
+const textSize = ref<number>(120)
 const font = ref<string>('Verdana')
 const textAlignment = ref<string>('left')
 const verticalAlignment = ref<string>('top')
@@ -309,14 +333,18 @@ const verticalAlignment = ref<string>('top')
 const generatingOutputFiles = ref<boolean>(true);
 const outputFile = ref<string>("")
 
-watch(orientation, () => buildAllOutputFiles())
-watch(phonePlacement, () => buildAllOutputFiles())
+watch(orientation, () => setTextAlignToDefault())
+watch(phonePlacement, () => setTextAlignToDefault())
 watch(screenshot, () => buildAllOutputFiles())
 watch(screenshot2, () => buildAllOutputFiles())
 watch(backgroundColor, () => buildAllOutputFiles())
 watch(textColor, () => buildAllOutputFiles())
 watch(phoneColor, () => buildAllOutputFiles())
 watch(text, () => buildAllOutputFiles())
+watch(wordSpacing, () => buildAllOutputFiles())
+watch(textSize, () => buildAllOutputFiles())
+watch(textAlignment, () => buildAllOutputFiles())
+watch(font, () => buildAllOutputFiles())
 
 // Screenshot-Input
 function onDropSecondScreenshot(e: DragEvent): void {
@@ -393,6 +421,10 @@ async function handleNewFont(file: File): Promise<void> {
   font.value = "UserFont";
 }
 
+async function setTextAlignToDefault(): Promise<void> {
+  textAlignment.value = getCurrentScreenshotType()?.textAlign!;
+  await buildAllOutputFiles();
+}
 
 
 async function buildAllOutputFiles(): Promise<void> {
@@ -409,6 +441,9 @@ async function buildOutputFile(): Promise<void> {
 
   const screenshotType: ScreenshotType | undefined = getCurrentScreenshotType();
   if (!screenshotType) return;
+
+  // Stelle sicher, dass alle Fonts geladen sind
+  await document.fonts.ready;
 
   // Container in Originalgröße erstellen
   const exportDiv = document.createElement('div')
@@ -482,10 +517,11 @@ async function buildOutputFile(): Promise<void> {
   textDiv.style.right = screenshotType.textRight
   textDiv.style.bottom = screenshotType.textBottom
   textDiv.style.transform = screenshotType.textTransform
-  textDiv.style.textAlign = screenshotType.textAlign
+  textDiv.style.textAlign = textAlignment.value
   textDiv.style.fontFamily = font.value
   textDiv.style.color = "#" + textColor.value
-  textDiv.style.fontSize = "120px"
+  textDiv.style.fontSize = textSize.value + "px"
+  exportDiv.style.wordSpacing = wordSpacing.value + "em";
   exportDiv.appendChild(textDiv)
 
   document.body.appendChild(exportDiv)
@@ -572,6 +608,7 @@ function reset() {
   font.value = 'Verdana';
 }
 
+setTextAlignToDefault();
 buildAllOutputFiles();
 
 </script>
