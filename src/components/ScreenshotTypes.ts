@@ -58,7 +58,7 @@ class ScreenshotType {
 
         twoScreenshots?: boolean,
         phonePlacement: "top" | "bottom" | "left" | "right" | "middle" | "tilted1" | "tilted2",
-        orientation: "landscape" | "portrait",
+        orientation: "landscape" | "portrait"| "featureGraphic",
     }) {
 
         this.imgWidth = options.imgWidth;
@@ -70,12 +70,12 @@ class ScreenshotType {
         this.screenshot2Width = options.screenshot2Width ?? (options.twoScreenshots ? 720 : null);
         this.screenshot2Height = options.screenshot2Height ?? (options.twoScreenshots ? 1480 : null);
 
-        this.phoneFilename = options.phoneFilename ?? (options.orientation == "portrait" ? "phone_vertical.png" : "phone_horizontal.png");
+        this.phoneFilename = options.phoneFilename ?? ((options.orientation == "portrait" || options.orientation == "featureGraphic") ? "phone_vertical.png" : "phone_horizontal.png");
         this.phoneLeft = options.phoneLeft ?? "50%";
         this.phoneTop = options.phoneTop ?? "50%";
         this.phoneTransform = options.phoneTransform ?? "translate(-50%, -50%)";
 
-        this.phone2Filename = options.phone2Filename ?? (options.twoScreenshots ? (options.orientation == "portrait" ? "phone_vertical.png" : "phone_horizontal.png") : null);
+        this.phone2Filename = options.phone2Filename ?? (options.twoScreenshots ? ((options.orientation == "portrait" || options.orientation == "featureGraphic") ? "phone_vertical.png" : "phone_horizontal.png") : null);
         this.phone2Left = options.phone2Left ?? (options.twoScreenshots ? "50%" : null);
         this.phone2Top = options.phone2Top ?? (options.twoScreenshots ? "50%" : null);
         this.phone2Transform = options.phone2Transform ?? (options.twoScreenshots ? "translate(-50%, -50%)" : null);
@@ -231,6 +231,30 @@ class ScreenshotTypes {
         orientation: "landscape"
     });
 
+
+    static readonly FG_BOTTOM = new ScreenshotType({
+        imgWidth: 1024,
+        imgHeight: 500,
+        screenshotWidth: 180,
+        screenshotHeight: 370,
+        screenshot2Width: 180,
+        screenshot2Height: 370,
+        phoneLeft: "65%",
+        phoneTop: "55%",
+        phoneTransform: "translate(-50%, -50%) rotate(-10deg)",
+        phone2Left: "80%",
+        phone2Top: "55%",
+        phone2Transform: "translate(-50%, -50%) rotate(10deg)",
+        textLeft: "5%",
+        textTop: "50%",
+        textAlign: "left",
+        textTransform: "translateY(-60%)",
+        textWidth: "425px",
+        twoScreenshots: true,
+        phonePlacement: "tilted1",
+        orientation: "featureGraphic"
+    });
+
     static readonly values = [
         ScreenshotTypes.PT_BOTTOM,
         ScreenshotTypes.PT_TOP,
@@ -241,6 +265,7 @@ class ScreenshotTypes {
         ScreenshotTypes.LS_TOP,
         ScreenshotTypes.LS_RIGHT,
         ScreenshotTypes.LS_BOTTOM,
+        ScreenshotTypes.FG_BOTTOM,
     ]
 }
 

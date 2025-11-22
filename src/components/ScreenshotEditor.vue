@@ -23,6 +23,10 @@
                 <input id="landscape" type="radio" name="orientation" v-model="orientation" :value="'landscape'" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
                 <label for="landscape" class="block text-sm/6 font-medium text-gray-900">Horizontal</label>
               </div>
+              <div class="flex items-center gap-x-3">
+                <input id="featureGraphic" type="radio" name="orientation" v-model="orientation" :value="'featureGraphic'" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                <label for="featureGraphic" class="block text-sm/6 font-medium text-gray-900">Vorstellungsgrafik</label>
+              </div>
             </div>
           </fieldset>
           <fieldset>
@@ -464,7 +468,7 @@ async function buildOutputFile(): Promise<void> {
     shotImg.style.left = screenshotType.phoneLeft
     shotImg.style.top = screenshotType.phoneTop
     shotImg.style.transform = screenshotType.phoneTransform + "scale(0.99)"
-    shotImg.style.borderRadius = '95px'
+    shotImg.style.borderRadius = ((screenshotType.screenshotWidth + screenshotType.screenshotHeight) / 23) + 'px'
     exportDiv.appendChild(shotImg)
   }
 
@@ -490,7 +494,7 @@ async function buildOutputFile(): Promise<void> {
       shot2Img.style.left = screenshotType.phone2Left!
       shot2Img.style.top = screenshotType.phone2Top!
       shot2Img.style.transform = screenshotType.phone2Transform! + "scale(0.99)"
-      shot2Img.style.borderRadius = '95px'
+      shot2Img.style.borderRadius = ((screenshotType.screenshot2Width! + screenshotType.screenshot2Height!) / 23) + 'px'
       exportDiv.appendChild(shot2Img)
     }
 
